@@ -39,3 +39,141 @@
         }
     </style>
 </head>
+<body>
+    <h1>Stage 1: Basic Snake Game</h1>
+    <div class="score">Score: <span id="score">0</span></div>
+
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+
+    <div class="controls">
+        <button onclick="startGame()">Start</button>
+        <button onclick="resetGame()">Reset</button>
+        <p>Use arrow keys to move</p>
+    </div>
+
+    <script>
+        class BasicSnake {
+            constructor() {
+                this.canvas = document.getElementById('gameCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.gridSize = 20;
+                this.tileCount = this.canvas.width / this.gridSize;
+
+                this.snake = [{ x: 5, y: 5 }];
+                this.food = this.generateFood();
+                this.dx = 0;
+                this.dy = 0;
+                this.score = 0;
+                this.gameRunning = false;
+
+                this.setupControls();
+                this.draw();
+            }
+
+            setupControls() {
+                document.addEventListener('keydown', (e) => {
+                    if (!this.gameRunning) return;
+
+                    switch(e.key) {
+                        case 'ArrowUp': if (this.dy === 0) { this.dx = 0; this.dy = -1; } break;
+                        case 'ArrowDown': if (this.dy === 0) { this.dx = 0; this.dy = 1; } break;
+                        case 'ArrowLeft': if (this.dx === 0) { this.dx = -1; this.dy = 0; } break;
+                        case 'ArrowRight': if (this.dx === 0) { this.dx = 1; this.dy = 0; } break;
+                    }
+                });
+            }
+
+            generateFood() {
+                let food;
+                do {
+                    food = {
+                        x: Math.floor(Math.random() * this.tileCount),
+                        y: Math.floor(Math.random() * this.tileCount)
+                    };
+                } while (this.snake.some(segment => segment.x === food.x && segment.y === food.y));
+                return food;
+            }
+
+            update() {
+                if (!this.gameRunning) return;
+
+                const head = { x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy };
+
+                // Wall collision
+                if (head.x < 0 || head.x >= this.tileCount || head.y < 0 || head.y >= this.tileCount) {
+                    this.gameOver();
+                    return;
+                }
+
+                // Self collision
+                if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                    this.gameOver();
+                    return;
+                }
+
+                this.snake.unshift(head);
+
+                // Food collision
+                if (head.x === this.food.x && head.y === this.food.y) {
+                    this.score += 10;
+                    this.food = this.generateFood();
+                    document.getElementById('score').textContent = this.score;
+                } else {
+                    this.snake.pop();
+                }
+
+                this.draw();
+            }
+
+            draw() {
+                // Clear canvas
+                this.ctx.fillStyle = '#000';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
+                // Draw snake
+                this.ctx.fillStyle = '#0f0';
+                this.snake.forEach(segment => {
+                    this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
+                });
+
+                // Draw food
+                this.ctx.fillStyle = '#f00';
+                this.ctx.fillRect(this.food.x * this.gridSize, this.food.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
+            }
+
+            start() {
+                this.gameRunning = true;
+                this.gameInterval = setInterval(() => this.update(), 200);
+            }
+
+            reset() {
+                clearInterval(this.gameInterval);
+                this.gameRunning = false;
+                this.snake = [{ x: 5, y: 5 }];
+                this.food = this.generateFood();
+                this.dx = 0;
+                this.dy = 0;
+                this.score = 0;
+                document.getElementById('score').textContent = this.score;
+                this.draw();
+            }
+
+            gameOver() {
+                clearInterval(this.gameInterval);
+                this.gameRunning = false;
+                alert(`Game Over! Score: ${this.score}`);
+            }
+        }
+
+        const game = new BasicSnake();
+
+        function startGame() {
+            game.start();
+        }
+
+        function resetGame() {
+            game.reset();
+        }
+    </script>
+</body>
+</html>
