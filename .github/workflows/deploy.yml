@@ -32,10 +32,18 @@ jobs:
       - name: Setup Pages
         uses: actions/configure-pages@v4
       
-      - name: Create index.html from paste.txt
+      - name: Verify deployment files
         run: |
-          # Copy the HTML content from paste.txt to index.html
-          cp paste.txt index.html
+          # Verify index.html exists and contains HTML content
+          if [ -f "index.html" ] && grep -q "<!DOCTYPE html>" index.html; then
+            echo "✅ index.html found and ready for deployment"
+            echo "File size: $(wc -c < index.html) bytes"
+          else
+            echo "❌ index.html is missing or invalid"
+            echo "Repository contents:"
+            ls -la
+            exit 1
+          fi
       
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
