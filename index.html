@@ -12,9 +12,9 @@
         }
 
         body {
-            background: #ffffff;
+            background: #f8f9fa;
             color: #333;
-            font: 16px 'Arial', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -23,22 +23,24 @@
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
         }
 
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
         h1 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             margin-bottom: 10px;
             color: #2c3e50;
-            text-align: center;
         }
 
         .subtitle {
-            color: #7f8c8d;
-            font-size: 1rem;
-            text-align: center;
-            margin-bottom: 25px;
+            color: #6c757d;
+            font-size: 1.1rem;
         }
 
         .controls {
@@ -46,16 +48,17 @@
             gap: 15px;
             justify-content: center;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 8px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
             border: 1px solid #e9ecef;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         button {
-            background: #3498db;
+            background: #007bff;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -67,44 +70,51 @@
         }
 
         button:hover {
-            background: #2980b9;
+            background: #0056b3;
+        }
+
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
         }
 
         .mode-selector {
             display: flex;
             gap: 2px;
-            background: #e9ecef;
-            padding: 2px;
-            border-radius: 6px;
+            background: #f8f9fa;
+            padding: 4px;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
         }
 
         .mode-btn {
             background: transparent;
             color: #6c757d;
             padding: 8px 16px;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 13px;
+            transition: all 0.2s;
         }
 
         .mode-btn.active {
-            background: #27ae60;
+            background: #28a745;
             color: white;
         }
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .stat {
             background: #fff;
             border: 1px solid #e9ecef;
-            padding: 15px;
-            border-radius: 8px;
+            padding: 18px;
+            border-radius: 10px;
             text-align: center;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .stat-label {
@@ -113,10 +123,11 @@
             text-transform: uppercase;
             letter-spacing: 0.5px;
             margin-bottom: 8px;
+            font-weight: 500;
         }
 
         .stat-value {
-            font-size: 20px;
+            font-size: 22px;
             font-weight: 700;
             color: #2c3e50;
         }
@@ -124,48 +135,59 @@
         .game-area {
             display: flex;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         canvas {
             background: #fff;
             border: 2px solid #dee2e6;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
         }
 
-        .speed-control {
+        .control-group {
             display: flex;
             align-items: center;
-            gap: 10px;
-            background: #fff;
+            gap: 8px;
+            background: #f8f9fa;
             padding: 8px 12px;
             border-radius: 6px;
             border: 1px solid #e9ecef;
         }
 
-        .speed-control label {
+        .control-group label {
             font-size: 13px;
             color: #495057;
             font-weight: 500;
+            min-width: 45px;
         }
 
         input[type="range"] {
             width: 100px;
-            accent-color: #3498db;
+            accent-color: #007bff;
         }
 
-        .speed-value {
+        select {
+            background: #fff;
+            border: 1px solid #ced4da;
+            color: #495057;
+            padding: 6px 8px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        .value-display {
             font-size: 12px;
             color: #6c757d;
-            min-width: 40px;
+            min-width: 45px;
+            text-align: center;
         }
 
         .legend {
             display: flex;
             gap: 15px;
             justify-content: center;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             flex-wrap: wrap;
         }
 
@@ -175,47 +197,93 @@
             gap: 8px;
             font-size: 13px;
             color: #495057;
-            background: #f8f9fa;
-            padding: 6px 12px;
+            background: #fff;
+            padding: 8px 12px;
             border-radius: 6px;
             border: 1px solid #e9ecef;
         }
 
         .legend-color {
-            width: 12px;
-            height: 12px;
-            border-radius: 2px;
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
             border: 1px solid #dee2e6;
         }
 
         .algorithm-info {
-            background: #f8f9fa;
+            background: #fff;
             border: 1px solid #e9ecef;
-            padding: 20px;
-            border-radius: 8px;
-            text-align: center;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .algorithm-info h3 {
             color: #2c3e50;
             margin-bottom: 15px;
-            font-size: 18px;
+            font-size: 20px;
         }
 
         .algorithm-info p {
             color: #495057;
             font-size: 14px;
             line-height: 1.6;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
+
+        .performance-metrics {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .metric {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 6px;
+        }
+
+        .status-good { background: #28a745; }
+        .status-average { background: #ffc107; }
+        .status-poor { background: #dc3545; }
 
         @media (max-width: 768px) {
             .controls {
                 gap: 10px;
+                padding: 15px;
             }
 
             .stats {
                 grid-template-columns: repeat(2, 1fr);
+            }
+
+            .performance-metrics {
+                grid-template-columns: 1fr;
             }
 
             canvas {
@@ -228,21 +296,35 @@
 </head>
 <body>
     <div class="container">
-        <h1>A* Snake</h1>
+        <div class="header">
+            <h1>A* Pathfinding Snake</h1>
+        </div>
+
         <div class="controls">
             <div class="mode-selector">
                 <button class="mode-btn active" onclick="setMode('ai')">AI Mode</button>
                 <button class="mode-btn" onclick="setMode('manual')">Manual</button>
+                <button class="mode-btn" onclick="setMode('hybrid')">Hybrid</button>
             </div>
 
             <button onclick="startGame()">Start Game</button>
             <button onclick="pauseGame()">Pause</button>
             <button onclick="resetGame()">Reset</button>
 
-            <div class="speed-control">
+            <div class="control-group">
                 <label>Speed:</label>
-                <input type="range" id="speedSlider" min="50" max="400" value="200" onchange="updateSpeed(this.value)">
-                <span class="speed-value" id="speedValue">200ms</span>
+                <input type="range" id="speedSlider" min="50" max="500" value="200" onchange="updateSpeed(this.value)">
+                <span class="value-display" id="speedValue">200ms</span>
+            </div>
+
+            <div class="control-group">
+                <label>Grid:</label>
+                <select id="gridSize" onchange="updateGridSize(this.value)">
+                    <option value="25">20x20</option>
+                    <option value="20" selected>25x25</option>
+                    <option value="15">33x33</option>
+                    <option value="12">41x41</option>
+                </select>
             </div>
         </div>
 
@@ -252,16 +334,20 @@
                 <div class="stat-value" id="score">0</div>
             </div>
             <div class="stat">
-                <div class="stat-label">Length</div>
+                <div class="stat-label">Snake Length</div>
                 <div class="stat-value" id="length">1</div>
             </div>
             <div class="stat">
-                <div class="stat-label">Explored Nodes</div>
+                <div class="stat-label">Nodes Explored</div>
                 <div class="stat-value" id="explored">0</div>
             </div>
             <div class="stat">
                 <div class="stat-label">Path Length</div>
                 <div class="stat-value" id="pathLength">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Efficiency</div>
+                <div class="stat-value" id="efficiency">100%</div>
             </div>
         </div>
 
@@ -271,24 +357,24 @@
 
         <div class="legend">
             <div class="legend-item">
-                <div class="legend-color" style="background: #27ae60;"></div>
-                <span>Snake Head</span>
-            </div>
-            <div class="legend-item">
-                <div class="legend-color" style="background: #2ecc71;"></div>
+                <div class="legend-color" style="background: #34ce57;"></div>
                 <span>Snake Body</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #e74c3c;"></div>
+                <div class="legend-color" style="background: #dc3545;"></div>
                 <span>Food</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #f39c12; opacity: 0.7;"></div>
+                <div class="legend-color" style="background: #ffc107; opacity: 0.8;"></div>
                 <span>A* Path</span>
             </div>
             <div class="legend-item">
-                <div class="legend-color" style="background: #95a5a6; opacity: 0.4;"></div>
-                <span>Explored</span>
+                <div class="legend-color" style="background: #6c757d; opacity: 0.4;"></div>
+                <span>Explored Nodes</span>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color" style="background: #fd7e14; opacity: 0.3;"></div>
+                <span>Danger Zone</span>
             </div>
         </div>
     </div>
@@ -313,14 +399,14 @@
             }
         }
 
-        class EnhancedAStarSnake {
+        class AdvancedAStarSnake {
             constructor() {
                 this.canvas = document.getElementById('gameCanvas');
                 this.ctx = this.canvas.getContext('2d');
                 this.gridSize = 20;
-                this.tileCount = this.canvas.width / this.gridSize;
+                this.tileCount = Math.floor(this.canvas.width / this.gridSize);
 
-                this.snake = [{ x: 10, y: 10 }];
+                this.snake = [{ x: Math.floor(this.tileCount/2), y: Math.floor(this.tileCount/2) }];
                 this.food = this.generateFood();
                 this.dx = 0;
                 this.dy = 0;
@@ -332,8 +418,11 @@
 
                 this.path = [];
                 this.exploredNodes = new Set();
+                this.dangerZones = new Set();
                 this.currentPathIndex = 0;
                 this.nodesExplored = 0;
+                this.pathEfficiency = 100;
+                this.computationTime = 0;
 
                 this.setupEventListeners();
                 this.draw();
@@ -341,7 +430,7 @@
 
             setupEventListeners() {
                 document.addEventListener('keydown', (e) => {
-                    if (this.mode === 'manual' && this.gameRunning) {
+                    if ((this.mode === 'manual' || this.mode === 'hybrid') && this.gameRunning) {
                         switch(e.key) {
                             case 'ArrowUp':
                                 if (this.dy === 0) { this.dx = 0; this.dy = -1; }
@@ -372,7 +461,9 @@
             }
 
             heuristic(a, b) {
-                return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+                const dx = Math.abs(a.x - b.x);
+                const dy = Math.abs(a.y - b.y);
+                return dx + dy + 0.001 * Math.min(dx, dy);
             }
 
             getNeighbors(node) {
@@ -389,8 +480,27 @@
                     );
             }
 
+            calculateDangerZones() {
+                this.dangerZones.clear();
+
+                this.snake.forEach((segment, index) => {
+                    if (index === 0) return;
+
+                    for (let dx = -1; dx <= 1; dx++) {
+                        for (let dy = -1; dy <= 1; dy++) {
+                            const x = segment.x + dx;
+                            const y = segment.y + dy;
+                            if (x >= 0 && x < this.tileCount && y >= 0 && y < this.tileCount) {
+                                this.dangerZones.add(`${x},${y}`);
+                            }
+                        }
+                    }
+                });
+            }
+
             findPath() {
-                const start = this.snake[0];
+                const start = performance.now();
+                const startPos = this.snake[0];
                 const goal = this.food;
 
                 const openSet = new PriorityQueue();
@@ -402,10 +512,10 @@
                 this.exploredNodes.clear();
                 this.nodesExplored = 0;
 
-                const startKey = `${start.x},${start.y}`;
+                const startKey = `${startPos.x},${startPos.y}`;
                 gScore.set(startKey, 0);
-                fScore.set(startKey, this.heuristic(start, goal));
-                openSet.enqueue(start, fScore.get(startKey));
+                fScore.set(startKey, this.heuristic(startPos, goal));
+                openSet.enqueue(startPos, fScore.get(startKey));
 
                 while (!openSet.isEmpty()) {
                     const current = openSet.dequeue();
@@ -421,6 +531,11 @@
                             path.unshift(temp);
                             temp = cameFrom.get(`${temp.x},${temp.y}`);
                         }
+
+                        this.computationTime = performance.now() - start;
+                        const optimalDistance = this.heuristic(startPos, goal);
+                        this.pathEfficiency = Math.round((optimalDistance / Math.max(path.length - 1, 1)) * 100);
+
                         return path.slice(1);
                     }
 
@@ -431,7 +546,28 @@
 
                         if (closedSet.has(neighborKey)) continue;
 
-                        const tentativeGScore = gScore.get(currentKey) + 1;
+                        let moveCost = 1;
+
+                        if (this.dangerZones.has(neighborKey)) {
+                            moveCost += 2;
+                        }
+
+                        if (this.snake.length > 1) {
+                            const prevDir = {
+                                x: this.snake[0].x - this.snake[1].x,
+                                y: this.snake[0].y - this.snake[1].y
+                            };
+                            const newDir = {
+                                x: neighbor.x - current.x,
+                                y: neighbor.y - current.y
+                            };
+
+                            if (prevDir.x === newDir.x && prevDir.y === newDir.y) {
+                                moveCost -= 0.1;
+                            }
+                        }
+
+                        const tentativeGScore = gScore.get(currentKey) + moveCost;
 
                         if (!gScore.has(neighborKey) || tentativeGScore < gScore.get(neighborKey)) {
                             cameFrom.set(neighborKey, current);
@@ -443,13 +579,16 @@
                     }
                 }
 
+                this.computationTime = performance.now() - start;
                 return [];
             }
 
             update() {
                 if (!this.gameRunning) return;
 
-                if (this.mode === 'ai') {
+                this.calculateDangerZones();
+
+                if (this.mode === 'ai' || (this.mode === 'hybrid' && (this.dx === 0 && this.dy === 0))) {
                     if (this.path.length === 0 || this.currentPathIndex >= this.path.length) {
                         this.path = this.findPath();
                         this.currentPathIndex = 0;
@@ -493,7 +632,6 @@
             }
 
             draw() {
-                // Clear canvas
                 this.ctx.fillStyle = '#fff';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
@@ -509,22 +647,29 @@
                     this.ctx.stroke();
                 }
 
+                // Draw danger zones
+                this.ctx.fillStyle = 'rgba(253, 126, 20, 0.2)';
+                for (const zoneKey of this.dangerZones) {
+                    const [x, y] = zoneKey.split(',').map(Number);
+                    this.ctx.fillRect(x * this.gridSize + 1, y * this.gridSize + 1, this.gridSize - 2, this.gridSize - 2);
+                }
+
                 // Draw explored nodes
-                this.ctx.fillStyle = 'rgba(149, 165, 166, 0.3)';
+                this.ctx.fillStyle = 'rgba(108, 117, 125, 0.3)';
                 for (const nodeKey of this.exploredNodes) {
                     const [x, y] = nodeKey.split(',').map(Number);
                     this.ctx.fillRect(x * this.gridSize + 2, y * this.gridSize + 2, this.gridSize - 4, this.gridSize - 4);
                 }
 
                 // Draw A* path
-                this.ctx.fillStyle = 'rgba(243, 156, 18, 0.7)';
+                this.ctx.fillStyle = 'rgba(255, 193, 7, 0.7)';
                 for (const node of this.path) {
                     this.ctx.fillRect(node.x * this.gridSize + 3, node.y * this.gridSize + 3, this.gridSize - 6, this.gridSize - 6);
                 }
 
                 // Draw snake
                 this.snake.forEach((segment, index) => {
-                    this.ctx.fillStyle = index === 0 ? '#27ae60' : '#2ecc71';
+                    this.ctx.fillStyle = index === 0 ? '#28a745' : '#34ce57';
                     this.ctx.fillRect(
                         segment.x * this.gridSize + 1,
                         segment.y * this.gridSize + 1,
@@ -532,7 +677,6 @@
                         this.gridSize - 2
                     );
 
-                    // Add head indicator
                     if (index === 0) {
                         this.ctx.fillStyle = '#fff';
                         this.ctx.fillRect(
@@ -545,7 +689,7 @@
                 });
 
                 // Draw food
-                this.ctx.fillStyle = '#e74c3c';
+                this.ctx.fillStyle = '#dc3545';
                 this.ctx.fillRect(
                     this.food.x * this.gridSize + 1,
                     this.food.y * this.gridSize + 1,
@@ -553,7 +697,6 @@
                     this.gridSize - 2
                 );
 
-                // Add food highlight
                 this.ctx.fillStyle = '#fff';
                 this.ctx.fillRect(
                     this.food.x * this.gridSize + 6,
@@ -568,6 +711,13 @@
                 document.getElementById('length').textContent = this.snake.length;
                 document.getElementById('explored').textContent = this.nodesExplored;
                 document.getElementById('pathLength').textContent = this.path.length;
+                document.getElementById('efficiency').textContent = this.pathEfficiency + '%';
+                document.getElementById('pathEfficiency').textContent = this.pathEfficiency + '%';
+                document.getElementById('computeTime').textContent = this.computationTime < 1 ? '< 1ms' : Math.round(this.computationTime) + 'ms';
+
+                // Update performance indicator
+                const performance = this.pathEfficiency >= 90 ? 'Optimal' : this.pathEfficiency >= 75 ? 'Good' : 'Average';
+                document.getElementById('performance').textContent = performance;
             }
 
             start() {
@@ -586,15 +736,18 @@
 
             reset() {
                 this.pause();
-                this.snake = [{ x: 10, y: 10 }];
+                this.snake = [{ x: Math.floor(this.tileCount/2), y: Math.floor(this.tileCount/2) }];
                 this.food = this.generateFood();
                 this.dx = 0;
                 this.dy = 0;
                 this.score = 0;
                 this.path = [];
                 this.exploredNodes.clear();
+                this.dangerZones.clear();
                 this.currentPathIndex = 0;
                 this.nodesExplored = 0;
+                this.pathEfficiency = 100;
+                this.computationTime = 0;
                 this.updateStats();
                 this.draw();
             }
@@ -602,7 +755,7 @@
             gameOver() {
                 this.pause();
                 setTimeout(() => {
-                    if (confirm(`Game Over! Score: ${this.score}\nPlay again?`)) {
+                    if (confirm(`Game Over! Final Score: ${this.score}\nSnake Length: ${this.snake.length}\nPlay again?`)) {
                         this.reset();
                     }
                 }, 100);
@@ -617,17 +770,25 @@
                 }
             }
 
+            setGridSize(size) {
+                this.pause();
+                this.gridSize = parseInt(size);
+                this.tileCount = Math.floor(this.canvas.width / this.gridSize);
+                this.reset();
+            }
+
             setMode(mode) {
                 this.mode = mode;
                 if (mode === 'manual') {
                     this.path = [];
                     this.exploredNodes.clear();
+                    this.dangerZones.clear();
                     this.draw();
                 }
             }
         }
 
-        const game = new EnhancedAStarSnake();
+        const game = new AdvancedAStarSnake();
 
         function startGame() {
             game.start();
@@ -643,6 +804,10 @@
 
         function updateSpeed(value) {
             game.setSpeed(value);
+        }
+
+        function updateGridSize(value) {
+            game.setGridSize(value);
         }
 
         function setMode(mode) {
