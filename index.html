@@ -3,56 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stage 1: Basic Snake Game</title>
+    <title>A* Pathfinding</title>
     <style>
         body {
-            background: #222;
-            color: white;
-            font-family: Arial, sans-serif;
+            background: #ffffff;
+            color: #333;
+            font: 16px 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
-            padding: 20px;
+            padding: 10px;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: #2c3e50;
         }
 
         canvas {
-            background: #000;
-            border: 2px solid #444;
+            background: #fff;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
         .controls {
             margin: 20px 0;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
         }
 
         button {
-            background: #666;
+            background: #3498db;
             color: white;
             border: none;
             padding: 10px 20px;
-            margin: 5px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
             cursor: pointer;
+            transition: background 0.2s;
         }
 
-        .score {
-            font-size: 24px;
-            margin: 10px 0;
+        button:hover {
+            background: #2980b9;
+        }
+
+        button.active {
+            background: #27ae60;
+        }
+
+        .stats {
+            display: flex;
+            gap: 20px;
+            margin: 15px 0;
+            flex-wrap: wrap;
+        }
+
+        .stat {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            padding: 12px 16px;
+            border-radius: 6px;
+            text-align: center;
+            min-width: 100px;
+        }
+
+        .stat-label {
+            font-size: 12px;
+            color: #6c757d;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+
+        .legend {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #495057;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 2px;
+            border: 1px solid #dee2e6;
+        }
+
+        .algorithm-info {
+            background: #fff;
+            border: 1px solid #dee2e6;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        .algorithm-info h3 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .algorithm-info p {
+            color: #495057;
+            font-size: 14px;
+            line-height: 1.5;
         }
     </style>
 </head>
 <body>
-    <h1>Stage 1: Basic Snake Game</h1>
-    <div class="score">Score: <span id="score">0</span></div>
+    <h1>A* Pathfinding Snake</h1>
 
-    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <div class="stats">
+        <div class="stat">
+            <div class="stat-label">Score</div>
+            <div class="stat-value" id="score">0</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Length</div>
+            <div class="stat-value" id="length">1</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Nodes Explored</div>
+            <div class="stat-value" id="explored">0</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">Path Length</div>
+            <div class="stat-value" id="pathLength">0</div>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas" width="500" height="500"></canvas>
 
     <div class="controls">
+        <button class="active" onclick="setMode('ai')">AI Mode</button>
+        <button onclick="setMode('manual')">Manual Mode</button>
         <button onclick="startGame()">Start</button>
+        <button onclick="pauseGame()">Pause</button>
         <button onclick="resetGame()">Reset</button>
-        <p>Use arrow keys to move</p>
+    </div>
+
+    <div class="legend">
+        <div class="legend-item">
+            <div class="legend-color" style="background: #27ae60;"></div>
+            <span>Snake Head</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #2ecc71;"></div>
+            <span>Snake Body</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #e74c3c;"></div>
+            <span>Food</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #f39c12; opacity: 0.6;"></div>
+            <span>A* Path</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color" style="background: #95a5a6; opacity: 0.4;"></div>
+            <span>Explored Nodes</span>
+        </div>
+    </div>
+
+    <div class="algorithm-info">
+        <h3>A* Pathfinding Algorithm</h3>
+        <p>The AI uses the A* algorithm to find the optimal path to food while avoiding its own body. A* evaluates each cell using f(n) = g(n) + h(n), where g(n) is the cost from start to current node and h(n) is the heuristic distance to the goal. This ensures the shortest path is found efficiently.</p>
     </div>
 
     <script>
-        class BasicSnake {
+        class PriorityQueue {
+            constructor() {
+                this.elements = [];
+            }
+
+            enqueue(element, priority) {
+                this.elements.push({ element, priority });
+                this.elements.sort((a, b) => a.priority - b.priority);
+            }
+
+            dequeue() {
+                return this.elements.shift()?.element;
+            }
+
+            isEmpty() {
+                return this.elements.length === 0;
+            }
+        }
+
+        class AStarSnake {
             constructor() {
                 this.canvas = document.getElementById('gameCanvas');
                 this.ctx = this.canvas.getContext('2d');
@@ -65,6 +226,12 @@
                 this.dy = 0;
                 this.score = 0;
                 this.gameRunning = false;
+                this.mode = 'ai';
+
+                this.path = [];
+                this.exploredNodes = new Set();
+                this.currentPathIndex = 0;
+                this.nodesExplored = 0;
 
                 this.setupControls();
                 this.draw();
@@ -72,13 +239,13 @@
 
             setupControls() {
                 document.addEventListener('keydown', (e) => {
-                    if (!this.gameRunning) return;
-
-                    switch(e.key) {
-                        case 'ArrowUp': if (this.dy === 0) { this.dx = 0; this.dy = -1; } break;
-                        case 'ArrowDown': if (this.dy === 0) { this.dx = 0; this.dy = 1; } break;
-                        case 'ArrowLeft': if (this.dx === 0) { this.dx = -1; this.dy = 0; } break;
-                        case 'ArrowRight': if (this.dx === 0) { this.dx = 1; this.dy = 0; } break;
+                    if (this.mode === 'manual' && this.gameRunning) {
+                        switch(e.key) {
+                            case 'ArrowUp': if (this.dy === 0) { this.dx = 0; this.dy = -1; } break;
+                            case 'ArrowDown': if (this.dy === 0) { this.dx = 0; this.dy = 1; } break;
+                            case 'ArrowLeft': if (this.dx === 0) { this.dx = -1; this.dy = 0; } break;
+                            case 'ArrowRight': if (this.dx === 0) { this.dx = 1; this.dy = 0; } break;
+                        }
                     }
                 });
             }
@@ -94,18 +261,108 @@
                 return food;
             }
 
+            heuristic(a, b) {
+                return Math.abs(a.x - b.x) + Math.abs(a.y - b.y);
+            }
+
+            getNeighbors(node) {
+                const directions = [
+                    { x: 0, y: -1 }, { x: 1, y: 0 }, { x: 0, y: 1 }, { x: -1, y: 0 }
+                ];
+
+                return directions
+                    .map(dir => ({ x: node.x + dir.x, y: node.y + dir.y }))
+                    .filter(neighbor =>
+                        neighbor.x >= 0 && neighbor.x < this.tileCount &&
+                        neighbor.y >= 0 && neighbor.y < this.tileCount &&
+                        !this.snake.some(segment => segment.x === neighbor.x && segment.y === neighbor.y)
+                    );
+            }
+
+            findPath() {
+                const start = this.snake[0];
+                const goal = this.food;
+
+                const openSet = new PriorityQueue();
+                const closedSet = new Set();
+                const cameFrom = new Map();
+                const gScore = new Map();
+                const fScore = new Map();
+
+                this.exploredNodes.clear();
+                this.nodesExplored = 0;
+
+                const startKey = `${start.x},${start.y}`;
+                gScore.set(startKey, 0);
+                fScore.set(startKey, this.heuristic(start, goal));
+                openSet.enqueue(start, fScore.get(startKey));
+
+                while (!openSet.isEmpty()) {
+                    const current = openSet.dequeue();
+                    const currentKey = `${current.x},${current.y}`;
+
+                    this.exploredNodes.add(currentKey);
+                    this.nodesExplored++;
+
+                    if (current.x === goal.x && current.y === goal.y) {
+                        const path = [];
+                        let temp = current;
+                        while (temp) {
+                            path.unshift(temp);
+                            temp = cameFrom.get(`${temp.x},${temp.y}`);
+                        }
+                        return path.slice(1);
+                    }
+
+                    closedSet.add(currentKey);
+
+                    for (const neighbor of this.getNeighbors(current)) {
+                        const neighborKey = `${neighbor.x},${neighbor.y}`;
+
+                        if (closedSet.has(neighborKey)) continue;
+
+                        const tentativeGScore = gScore.get(currentKey) + 1;
+
+                        if (!gScore.has(neighborKey) || tentativeGScore < gScore.get(neighborKey)) {
+                            cameFrom.set(neighborKey, current);
+                            gScore.set(neighborKey, tentativeGScore);
+                            fScore.set(neighborKey, tentativeGScore + this.heuristic(neighbor, goal));
+
+                            openSet.enqueue(neighbor, fScore.get(neighborKey));
+                        }
+                    }
+                }
+
+                return [];
+            }
+
             update() {
                 if (!this.gameRunning) return;
 
+                if (this.mode === 'ai') {
+                    if (this.path.length === 0 || this.currentPathIndex >= this.path.length) {
+                        this.path = this.findPath();
+                        this.currentPathIndex = 0;
+
+                        if (this.path.length === 0) {
+                            this.gameOver();
+                            return;
+                        }
+                    }
+
+                    const nextMove = this.path[this.currentPathIndex];
+                    this.dx = nextMove.x - this.snake[0].x;
+                    this.dy = nextMove.y - this.snake[0].y;
+                    this.currentPathIndex++;
+                }
+
                 const head = { x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy };
 
-                // Wall collision
                 if (head.x < 0 || head.x >= this.tileCount || head.y < 0 || head.y >= this.tileCount) {
                     this.gameOver();
                     return;
                 }
 
-                // Self collision
                 if (this.snake.some(segment => segment.x === head.x && segment.y === head.y)) {
                     this.gameOver();
                     return;
@@ -113,66 +370,141 @@
 
                 this.snake.unshift(head);
 
-                // Food collision
                 if (head.x === this.food.x && head.y === this.food.y) {
                     this.score += 10;
                     this.food = this.generateFood();
-                    document.getElementById('score').textContent = this.score;
+                    this.path = [];
                 } else {
                     this.snake.pop();
                 }
 
+                this.updateStats();
                 this.draw();
             }
 
             draw() {
                 // Clear canvas
-                this.ctx.fillStyle = '#000';
+                this.ctx.fillStyle = '#fff';
                 this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
 
+                // Draw grid
+                this.ctx.strokeStyle = '#f0f0f0';
+                this.ctx.lineWidth = 1;
+                for (let i = 0; i <= this.tileCount; i++) {
+                    this.ctx.beginPath();
+                    this.ctx.moveTo(i * this.gridSize, 0);
+                    this.ctx.lineTo(i * this.gridSize, this.canvas.height);
+                    this.ctx.moveTo(0, i * this.gridSize);
+                    this.ctx.lineTo(this.canvas.width, i * this.gridSize);
+                    this.ctx.stroke();
+                }
+
+                // Draw explored nodes
+                this.ctx.fillStyle = 'rgba(149, 165, 166, 0.3)';
+                for (const nodeKey of this.exploredNodes) {
+                    const [x, y] = nodeKey.split(',').map(Number);
+                    this.ctx.fillRect(x * this.gridSize + 2, y * this.gridSize + 2, this.gridSize - 4, this.gridSize - 4);
+                }
+
+                // Draw path
+                this.ctx.fillStyle = 'rgba(243, 156, 18, 0.6)';
+                for (const node of this.path) {
+                    this.ctx.fillRect(node.x * this.gridSize + 4, node.y * this.gridSize + 4, this.gridSize - 8, this.gridSize - 8);
+                }
+
                 // Draw snake
-                this.ctx.fillStyle = '#0f0';
-                this.snake.forEach(segment => {
-                    this.ctx.fillRect(segment.x * this.gridSize, segment.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
+                this.snake.forEach((segment, index) => {
+                    this.ctx.fillStyle = index === 0 ? '#27ae60' : '#2ecc71';
+                    this.ctx.fillRect(
+                        segment.x * this.gridSize + 1,
+                        segment.y * this.gridSize + 1,
+                        this.gridSize - 2,
+                        this.gridSize - 2
+                    );
                 });
 
                 // Draw food
-                this.ctx.fillStyle = '#f00';
-                this.ctx.fillRect(this.food.x * this.gridSize, this.food.y * this.gridSize, this.gridSize - 2, this.gridSize - 2);
+                this.ctx.fillStyle = '#e74c3c';
+                this.ctx.fillRect(
+                    this.food.x * this.gridSize + 1,
+                    this.food.y * this.gridSize + 1,
+                    this.gridSize - 2,
+                    this.gridSize - 2
+                );
+            }
+
+            updateStats() {
+                document.getElementById('score').textContent = this.score;
+                document.getElementById('length').textContent = this.snake.length;
+                document.getElementById('explored').textContent = this.nodesExplored;
+                document.getElementById('pathLength').textContent = this.path.length;
             }
 
             start() {
                 this.gameRunning = true;
-                this.gameInterval = setInterval(() => this.update(), 200);
+                this.gameInterval = setInterval(() => this.update(), 250);
+            }
+
+            pause() {
+                this.gameRunning = false;
+                if (this.gameInterval) {
+                    clearInterval(this.gameInterval);
+                    this.gameInterval = null;
+                }
             }
 
             reset() {
-                clearInterval(this.gameInterval);
-                this.gameRunning = false;
+                this.pause();
                 this.snake = [{ x: 5, y: 5 }];
                 this.food = this.generateFood();
                 this.dx = 0;
                 this.dy = 0;
                 this.score = 0;
-                document.getElementById('score').textContent = this.score;
+                this.path = [];
+                this.exploredNodes.clear();
+                this.currentPathIndex = 0;
+                this.nodesExplored = 0;
+                this.updateStats();
                 this.draw();
             }
 
             gameOver() {
-                clearInterval(this.gameInterval);
-                this.gameRunning = false;
+                this.pause();
                 alert(`Game Over! Score: ${this.score}`);
+            }
+
+            setMode(mode) {
+                this.mode = mode;
+                if (mode === 'manual') {
+                    this.path = [];
+                    this.exploredNodes.clear();
+                    this.draw();
+                }
             }
         }
 
-        const game = new BasicSnake();
+        const game = new AStarSnake();
 
         function startGame() {
             game.start();
         }
 
+        function pauseGame() {
+            game.pause();
+        }
+
         function resetGame() {
             game.reset();
+        }
+
+        function setMode(mode) {
+            game.setMode(mode);
+
+            // Update button styles
+            document.querySelectorAll('.controls button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
         }
     </script>
 </body>
