@@ -210,28 +210,6 @@
             border: 1px solid #dee2e6;
         }
 
-        .algorithm-info {
-            background: #fff;
-            border: 1px solid #e9ecef;
-            padding: 25px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .algorithm-info h3 {
-            color: #2c3e50;
-            margin-bottom: 15px;
-            font-size: 20px;
-        }
-
-        .algorithm-info p {
-            color: #495057;
-            font-size: 14px;
-            line-height: 1.6;
-            margin-bottom: 15px;
-        }
-
         .performance-metrics {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -302,9 +280,9 @@
 
         <div class="controls">
             <div class="mode-selector">
-                <button class="mode-btn active" onclick="setMode('ai')">AI Mode</button>
-                <button class="mode-btn" onclick="setMode('manual')">Manual</button>
-                <button class="mode-btn" onclick="setMode('hybrid')">Hybrid</button>
+                <button class="mode-btn active" data-mode="ai">AI Mode</button>
+                <button class="mode-btn" data-mode="manual">Manual</button>
+                <button class="mode-btn" data-mode="hybrid">Hybrid</button>
             </div>
 
             <button onclick="startGame()">Start Game</button>
@@ -446,6 +424,18 @@
                                 break;
                         }
                     }
+                });
+
+                // Add event listeners for mode buttons
+                document.querySelectorAll('.mode-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        const mode = e.target.dataset.mode;
+                        this.setMode(mode);
+
+                        // Update active button
+                        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+                        e.target.classList.add('active');
+                    });
                 });
             }
 
@@ -712,12 +702,6 @@
                 document.getElementById('explored').textContent = this.nodesExplored;
                 document.getElementById('pathLength').textContent = this.path.length;
                 document.getElementById('efficiency').textContent = this.pathEfficiency + '%';
-                document.getElementById('pathEfficiency').textContent = this.pathEfficiency + '%';
-                document.getElementById('computeTime').textContent = this.computationTime < 1 ? '< 1ms' : Math.round(this.computationTime) + 'ms';
-
-                // Update performance indicator
-                const performance = this.pathEfficiency >= 90 ? 'Optimal' : this.pathEfficiency >= 75 ? 'Good' : 'Average';
-                document.getElementById('performance').textContent = performance;
             }
 
             start() {
@@ -808,14 +792,6 @@
 
         function updateGridSize(value) {
             game.setGridSize(value);
-        }
-
-        function setMode(mode) {
-            game.setMode(mode);
-
-            const buttons = document.querySelectorAll('.mode-btn');
-            buttons.forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
         }
     </script>
 </body>
